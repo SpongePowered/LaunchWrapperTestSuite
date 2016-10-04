@@ -48,6 +48,9 @@ LaunchWrapperTestSuite can be used with any build system. The following examples
     ```gradle
     test {
         systemProperty 'org.spongepowered.test.launch.tweaker', 'com.example.test.launch.MyTestTweaker'
+        
+        // Run tests it temp directory so the generated logs don't get written to the project
+        workingDir = {test.temporaryDir}
     }
     ```
 
@@ -69,7 +72,7 @@ public void MyTest {
 When you run your tests using `gradle test` it should load the test class in the custom classloader and apply the configured transformers.
 
 ## Parameterized test
-If you are using a [Parameterized test](https://github.com/junit-team/junit4/wiki/Parameterized-tests) you need to change the test runner to `LaunchWrapperParameterized`:
+If you are using a [parameterized test](https://github.com/junit-team/junit4/wiki/Parameterized-tests) you need to change the test runner to `LaunchWrapperParameterized`:
 
 ```java
 @RunWith(LaunchWrapperParameterized.class)
