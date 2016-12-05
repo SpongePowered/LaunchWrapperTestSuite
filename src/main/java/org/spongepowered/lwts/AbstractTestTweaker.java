@@ -66,6 +66,10 @@ public abstract class AbstractTestTweaker implements ITweaker {
     @Override
     @OverridingMethodsMustInvokeSuper
     public void injectIntoClassLoader(LaunchClassLoader loader) {
+        // Load our classes using the main class loader
+        loader.addClassLoaderExclusion("org.spongepowered.lwts.runner.");
+        loader.addClassLoaderExclusion("org.spongepowered.lwts.transformer.");
+
         // JUnit attempts to lookup the @Test annotation so we need to make sure the classes are loaded
         // using the same class loader (the main class loader)
         loader.addClassLoaderExclusion("org.junit.");

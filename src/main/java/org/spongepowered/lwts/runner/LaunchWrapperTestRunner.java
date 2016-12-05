@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.lwts;
+package org.spongepowered.lwts.runner;
 
 import com.google.common.base.Strings;
 import net.minecraft.launchwrapper.Launch;
