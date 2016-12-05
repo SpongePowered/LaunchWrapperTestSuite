@@ -22,16 +22,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.spongepowered.lwts;
 
-package org.spongepowered.test.launch;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
-public final class TestMain {
+/**
+ * {@link Parameterized} test runner for JUnit. To run a parameterized test
+ * in the Launchwrapper context, declare this class as test runner using
+ * {@link RunWith}.
+ */
+public class LaunchWrapperParameterized extends Parameterized {
 
-    private TestMain() {
-    }
-
-    public static void main(String[] args) {
-        // Nothing to do
+    /**
+     * Invoked by JUnit to initialize the {@link LaunchWrapperParameterized}
+     * test runner.
+     *
+     * @param klass The test class
+     * @throws Throwable If an error occurs during initialization
+     */
+    public LaunchWrapperParameterized(Class<?> klass) throws Throwable {
+        super(LaunchWrapperTestRunner.loadTestClass(klass));
     }
 
 }

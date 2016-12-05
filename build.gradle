@@ -39,12 +39,19 @@ task sourceJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
 artifacts {
     archives sourceJar
+    archives javadocJar
 }
 
 license {
     header = file('HEADER.txt')
+    newLine = false
     ext {
         name = project.name
         organization = project.organization

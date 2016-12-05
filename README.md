@@ -1,22 +1,24 @@
 # LaunchWrapperTestSuite
 LaunchWrapperTestSuite makes it possible to run JUnit tests that require transformed classes. It provides a custom test runner that will load the test class in a separate `LaunchClassLoader` that applies previously configured transformers.
 
-# Setup
+## Setup
 LaunchWrapperTestSuite can be used with any build system. The following examples will use [Gradle].
 
 1. Add test dependency on LaunchWrapperTestSuite:
 
     ```gradle
     dependencies {
-        testCompile 'org.spongepowered:launchwrappertestsuite:1.0'
+        testCompile 'org.spongepowered:launchwrappertestsuite:1.0-SNAPSHOT'
     }
     ```
 
 2. Implement a test tweak class that configures the transformers. LaunchWrapperTestSuite comes with `AbstractTestTweaker` which provides some utility methods and sets up the class loader to work with JUnit.
 
     ```java
+    package com.example.test.launch;
+
     import net.minecraft.launchwrapper.LaunchClassLoader;
-    import org.spongepowered.test.launch.AbstractTestTweaker;
+    import org.spongepowered.lwts.AbstractTestTweaker;
     
     public class MyTestTweaker extends AbstractTestTweaker {
     
@@ -28,7 +30,7 @@ LaunchWrapperTestSuite can be used with any build system. The following examples
             // Configure your transformers here (a few examples below)
             
             // Access transformer
-            registerAccessTransformer("test_at.cfg", "test2_at.cfg");
+            registerAccessTransformer("META-INF/test_at.cfg");
             
             // Mixin environment
             MixinBootstrap.init();
@@ -47,19 +49,19 @@ LaunchWrapperTestSuite can be used with any build system. The following examples
 
     ```gradle
     test {
-        systemProperty 'org.spongepowered.test.launch.tweaker', 'com.example.test.launch.MyTestTweaker'
+        systemProperty 'lwts.tweaker', 'com.example.test.launch.MyTestTweaker'
         
-        // Run tests it temp directory so the generated logs don't get written to the project
+        // Run tests in a temporary directory
         workingDir = {test.temporaryDir}
     }
     ```
 
-# Usage
+## Usage
 To make a test class use the custom test runner, all you need to do is add a annotation to it:
 
 ```java
 @RunWith(LaunchWrapperTestRunner.class)
-public void MyTest {
+public class MyTest {
 
     @Test
     public void testSomething() {
@@ -71,12 +73,12 @@ public void MyTest {
 
 When you run your tests using `gradle test` it should load the test class in the custom classloader and apply the configured transformers.
 
-## Parameterized test
+### Parameterized test
 If you are using a [parameterized test](https://github.com/junit-team/junit4/wiki/Parameterized-tests) you need to change the test runner to `LaunchWrapperParameterized`:
 
 ```java
 @RunWith(LaunchWrapperParameterized.class)
-public void MyParameterizedTest {
+public class MyParameterizedTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> getParameters() {

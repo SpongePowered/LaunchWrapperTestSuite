@@ -22,15 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.spongepowered.lwts;
 
-package org.spongepowered.test.launch;
+/**
+ * Default main class. Exits immediately so test execution can start.
+ *
+ * <p>If you need to do additional initialization you can replace this
+ * class by overriding {@link AbstractTestTweaker#getLaunchTarget()}.</p>
+ */
+public final class TestMain {
 
-import org.junit.runners.Parameterized;
+    private TestMain() {
+    }
 
-public class LaunchWrapperParameterized extends Parameterized {
-
-    public LaunchWrapperParameterized(Class<?> klass) throws Throwable {
-        super(LaunchWrapperTestRunner.loadTestClass(klass));
+    public static void main(String[] args) {
+        // Nothing to do
     }
 
 }

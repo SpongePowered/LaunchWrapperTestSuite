@@ -22,10 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package org.spongepowered.test.launch.transformer;
+package org.spongepowered.lwts.transformer;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.io.Resources.getResource;
 import static com.google.common.io.Resources.readLines;
 import static org.objectweb.asm.Opcodes.ACC_FINAL;
@@ -42,7 +42,6 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.io.LineProcessor;
 import net.minecraft.launchwrapper.IClassTransformer;
-import net.minecraft.launchwrapper.Launch;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -59,19 +58,12 @@ public class AccessTransformer implements IClassTransformer {
 
     private static final Splitter SEPARATOR = Splitter.on(' ').trimResults();
 
-    private final ImmutableMultimap<String, Modifier> modifiers;
+    private Processor processor = new Processor();
+    private ImmutableMultimap<String, Modifier> modifiers;
 
-    public AccessTransformer() throws IOException {
-        this((String[]) Launch.blackboard.get("at"));
-    }
-
-    protected AccessTransformer(String... files) throws IOException {
-        Processor processor = new Processor();
-        for (String file : files) {
-            readLines(getResource(file), Charsets.UTF_8, processor);
-        }
-
-        this.modifiers = processor.build();
+    public void register(String file) throws IOException {
+        checkState(this.processor != null, "Cannot add access transformer after first class was transformed");
+        readLines(getResource(file), Charsets.UTF_8, this.processor);
     }
 
     private static String substringBefore(String s, char c) {
@@ -81,6 +73,11 @@ public class AccessTransformer implements IClassTransformer {
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes) {
+        if (this.modifiers == null) {
+            this.modifiers = this.processor.build();
+            this.processor = null;
+        }
+
         if (bytes == null || !this.modifiers.containsKey(transformedName)) {
             return bytes;
         }
