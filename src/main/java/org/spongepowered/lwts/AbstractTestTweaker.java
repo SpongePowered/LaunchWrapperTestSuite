@@ -81,7 +81,7 @@ public abstract class AbstractTestTweaker implements ITweaker {
      */
     @Override
     public String getLaunchTarget() {
-        return "org.spongepowered.test.launch.TestMain";
+        return "org.spongepowered.lwts.TestMain";
     }
 
     /**
@@ -103,7 +103,7 @@ public abstract class AbstractTestTweaker implements ITweaker {
      */
     protected final void registerAccessTransformer(String file) {
         if (this.transformer == null) {
-            Launch.classLoader.registerTransformer("org.spongepowered.test.launch.transformer.AccessTransformer");
+            Launch.classLoader.registerTransformer("org.spongepowered.lwts.transformer.AccessTransformer");
             for (IClassTransformer transformer : Launch.classLoader.getTransformers()) {
                 if (transformer instanceof AccessTransformer) {
                     this.transformer = (AccessTransformer) transformer;
