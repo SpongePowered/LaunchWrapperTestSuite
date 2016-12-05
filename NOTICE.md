@@ -1,6 +1,6 @@
 # Credits
 
-- The ASM access transformer in the package `org.spongepowered.test.launchwrapper.transformer` are based on parts of the
+- The ASM access transformer in the package `org.spongepowered.test.launchwrapper.transformer` is based on parts of the
 [Forge Mod Loader](https://github.com/MinecraftForge/FML) licensed under the
 [GNU Lesser General Public License v2.1](http://www.gnu.org/licenses/lgpl-2.1.html), but can be redistributed under [any alternative open source 
 license as classified by the OSI](http://opensource.org/licenses):
