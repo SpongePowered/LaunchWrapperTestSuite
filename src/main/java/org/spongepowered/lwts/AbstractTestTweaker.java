@@ -74,6 +74,11 @@ public abstract class AbstractTestTweaker implements ITweaker {
         // using the same class loader (the main class loader)
         loader.addClassLoaderExclusion("org.junit.");
         loader.addClassLoaderExclusion("org.hamcrest.");
+
+        // Mockito
+        loader.addClassLoaderExclusion("org.mockito.");
+        loader.addClassLoaderExclusion("net.bytebuddy.");
+        loader.addClassLoaderExclusion("org.objenesis.");
     }
 
     /**

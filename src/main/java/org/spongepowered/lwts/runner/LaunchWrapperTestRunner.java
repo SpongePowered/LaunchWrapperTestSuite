@@ -69,7 +69,16 @@ public class LaunchWrapperTestRunner extends BlockJUnit4ClassRunner {
                 throw new RuntimeException("Missing system property " + TWEAKER_PROPERTY);
             }
 
+            // Normally, LaunchWrapper sets the thread's context class loader
+            // to the LaunchClassLoader. However, that causes issue as soon as
+            // tests are run in the normal class loader in the same thread.
+            // Simply resetting it seems to fix various issues with Mockito.
+            Thread thread = Thread.currentThread();
+            ClassLoader contextClassLoader = thread.getContextClassLoader();
+
             Launch.main(new String[]{"--tweakClass", tweakClass});
+
+            thread.setContextClassLoader(contextClassLoader);
         }
 
         try {
