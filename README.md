@@ -8,7 +8,7 @@ LaunchWrapperTestSuite can be used with any build system. The following examples
 
     ```gradle
     dependencies {
-        testCompile 'org.spongepowered:launchwrappertestsuite:1.0-SNAPSHOT'
+        testCompile 'org.spongepowered:lwts:1.0.0'
     }
     ```
 
