@@ -45,7 +45,7 @@ LaunchWrapperTestSuite can be used with any build system. The following examples
     }
     ```
 
-3. Set a system property `org.spongepowered.test.launch.tweaker` with the full qualified class name of your tweaker:
+3. Set a system property `lwts.tweaker` with the full qualified class name of your tweaker:
 
     ```gradle
     test {
