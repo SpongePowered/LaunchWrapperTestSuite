@@ -26,23 +26,25 @@ package org.spongepowered.lwts.runner;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.junit.runners.model.RunnerBuilder;
 
 /**
  * {@link Parameterized} test runner for JUnit. To run a parameterized test
  * in the Launchwrapper context, declare this class as test runner using
  * {@link RunWith}.
  */
-public class LaunchWrapperParameterized extends Parameterized {
+public class LaunchWrapperParameterized extends LaunchWrapperDelegateRunner {
 
     /**
      * Invoked by JUnit to initialize the {@link LaunchWrapperParameterized}
      * test runner.
      *
      * @param klass The test class
+     * @param builder The RunnerBuilder
      * @throws Throwable If an error occurs during initialization
      */
-    public LaunchWrapperParameterized(Class<?> klass) throws Throwable {
-        super(LaunchWrapperTestRunner.loadTestClass(klass));
+    public LaunchWrapperParameterized(Class<?> klass, RunnerBuilder builder) throws Throwable {
+        super(Parameterized.class, klass, builder);
     }
 
 }
