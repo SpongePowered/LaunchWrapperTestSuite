@@ -24,68 +24,26 @@
  */
 package org.spongepowered.lwts.runner;
 
-import com.google.common.base.Strings;
-import net.minecraft.launchwrapper.Launch;
 import org.junit.runner.RunWith;
-import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.JUnit4;
 import org.junit.runners.model.InitializationError;
+import org.junit.runners.model.RunnerBuilder;
 
 /**
  * Standard JUnit test runner. To run a test class in the Launchwrapper
  * context, declare this class as test runner using {@link RunWith}.
  */
-public class LaunchWrapperTestRunner extends BlockJUnit4ClassRunner {
-
-    public static final String TWEAKER_PROPERTY = "lwts.tweaker";
-
-    private static boolean initialized;
+public class LaunchWrapperTestRunner extends LaunchWrapperDelegateRunner {
 
     /**
      * Invoked by JUnit to initialize the {@link LaunchWrapperTestRunner}.
      *
      * @param klass The test class
+     * @param builder The RunnerBuilder
      * @throws InitializationError If an error occurs during initialization
      */
-    public LaunchWrapperTestRunner(Class<?> klass) throws InitializationError {
-        super(loadTestClass(klass));
-    }
-
-    /**
-     * Loads a test class within the Launchwrapper context.
-     *
-     * <p>The context will be initialized the first time this method is
-     * invoked.</p>
-     *
-     * @param originalClass The original test class to load using Launchwrapper
-     * @return The loaded class
-     * @throws InitializationError If an errors occurs when loading the class
-     */
-    public static Class<?> loadTestClass(Class<?> originalClass) throws InitializationError {
-        if (!initialized) {
-            initialized = true;
-
-            String tweakClass = System.getProperty(TWEAKER_PROPERTY);
-            if (Strings.isNullOrEmpty(tweakClass)) {
-                throw new RuntimeException("Missing system property " + TWEAKER_PROPERTY);
-            }
-
-            // Normally, LaunchWrapper sets the thread's context class loader
-            // to the LaunchClassLoader. However, that causes issue as soon as
-            // tests are run in the normal class loader in the same thread.
-            // Simply resetting it seems to fix various issues with Mockito.
-            Thread thread = Thread.currentThread();
-            ClassLoader contextClassLoader = thread.getContextClassLoader();
-
-            Launch.main(new String[]{"--tweakClass", tweakClass});
-
-            thread.setContextClassLoader(contextClassLoader);
-        }
-
-        try {
-            return Class.forName(originalClass.getName(), true, Launch.classLoader);
-        } catch (ClassNotFoundException e) {
-            throw new InitializationError(e);
-        }
+    public LaunchWrapperTestRunner(Class<?> klass, RunnerBuilder builder) throws InitializationError {
+        super(JUnit4.class, klass, builder);
     }
 
 }
